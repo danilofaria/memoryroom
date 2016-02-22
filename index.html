@@ -62,7 +62,7 @@
 
 				scene = new THREE.Scene();
 
-				var ambient = new THREE.AmbientLight( 0x101030 );
+				var ambient = new THREE.AmbientLight( 0xFF0 );
 				scene.add( ambient );
 
 				var directionalLight = new THREE.DirectionalLight( 0xffeedd );
@@ -101,6 +101,12 @@
 
 				var loader = new THREE.OBJLoader( manager );
 				loader.load( 'obj/memoryroom.obj', function ( object ) {
+
+					object.traverse( function ( child ) {
+						if ( child instanceof THREE.Mesh ) {
+							child.material = new THREE.MeshNormalMaterial( );
+						}
+					} );
 
 					object.position.y = - 50;
 					object.scale.x = 40;
