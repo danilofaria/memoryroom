@@ -34,11 +34,21 @@
 		<script src="js/loaders/OBJLoader.js"></script>
 		<script src="js/controls/FlyControls.js"></script>
 
+		<script src="js/shaders/CopyShader.js"></script>
+		<script src="js/shaders/DigitalGlitch.js"></script>
+
+		<script src="js/postprocessing/EffectComposer.js"></script>
+		<script src="js/postprocessing/RenderPass.js"></script>
+		<script src="js/postprocessing/MaskPass.js"></script>
+		<script src="js/postprocessing/ShaderPass.js"></script>
+		<script src="js/postprocessing/GlitchPass.js"></script>
+
 		<script>
 
 			var container;
 
-			var camera, scene, renderer, controls;
+			var camera, scene, renderer, controls, composer;
+			var glitchPass;
 
 			var mouseX = 0, mouseY = 0;
 
@@ -123,9 +133,17 @@
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				container.appendChild( renderer.domElement );
 
-				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
+				// postprocessing
+				composer = new THREE.EffectComposer( renderer );
+				composer.addPass( new THREE.RenderPass( scene, camera ) );
+
+				glitchPass = new THREE.GlitchPass();
+				glitchPass.renderToScreen = true;
+				composer.addPass( glitchPass );
 				//
+
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
 				window.addEventListener( 'resize', onWindowResize, false );
 
@@ -167,7 +185,8 @@
 
 				camera.lookAt( scene.position );
 
-				renderer.render( scene, camera );
+				composer.render();
+				// renderer.render( scene, camera );
 
 			}
 
