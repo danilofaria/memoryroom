@@ -100,8 +100,12 @@
 				// model
 
 				var loader = new THREE.OBJLoader( manager );
-				loader.load( 'obj/untitled.obj', function ( object ) {
+				loader.load( 'obj/memoryroom.obj', function ( object ) {
 
+					object.position.y = - 50;
+					object.scale.x = 40;
+					object.scale.y = 40;
+					object.scale.z = 40;
 					scene.add( object );
 
 				}, onProgress, onError );
@@ -152,7 +156,7 @@
 			function render() {
 				var delta = clock.getDelta();
 
-				controls.movementSpeed = 500;
+				controls.movementSpeed = 100;
 				controls.update( delta );
 
 				camera.lookAt( scene.position );
