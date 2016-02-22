@@ -27,23 +27,24 @@
 
 	<body>
 		<div id="info">
-		<a href="http://threejs.org" target="_blank">three.js</a> - OBJLoader test
+		<b>WASD</b> move, <b>R|F</b> up | down, <b>Q|E</b> roll, <b>up|down</b> pitch, <b>left|right</b> yaw<br/>
 		</div>
 
 		<script src="three.min.js"></script>
 		<script src="js/loaders/OBJLoader.js"></script>
+		<script src="js/controls/FlyControls.js"></script>
 
 		<script>
 
 			var container;
 
-			var camera, scene, renderer;
+			var camera, scene, renderer, controls;
 
 			var mouseX = 0, mouseY = 0;
 
 			var windowHalfX = window.innerWidth / 2;
 			var windowHalfY = window.innerHeight / 2;
-
+			var clock = new THREE.Clock();
 
 			init();
 			animate();
@@ -67,6 +68,13 @@
 				var directionalLight = new THREE.DirectionalLight( 0xffeedd );
 				directionalLight.position.set( 0, 0, 1 );
 				scene.add( directionalLight );
+
+				controls = new THREE.FlyControls( camera );
+				controls.movementSpeed = 1000;
+				controls.domElement = container;
+				controls.rollSpeed = Math.PI / 24;
+				controls.autoForward = false;
+				controls.dragToLook = false;
 
 				// texture
 
@@ -94,17 +102,6 @@
 				var loader = new THREE.OBJLoader( manager );
 				loader.load( 'obj/untitled.obj', function ( object ) {
 
-					// object.traverse( function ( child ) {
-
-						// if ( child instanceof THREE.Mesh ) {
-
-						// 	child.material.map = texture;
-
-						// }
-
-					// } );
-
-					object.position.y = - 95;
 					scene.add( object );
 
 				}, onProgress, onError );
@@ -153,9 +150,10 @@
 			}
 
 			function render() {
+				var delta = clock.getDelta();
 
-				camera.position.x += ( mouseX - camera.position.x ) * .05;
-				camera.position.y += ( - mouseY - camera.position.y ) * .05;
+				controls.movementSpeed = 500;
+				controls.update( delta );
 
 				camera.lookAt( scene.position );
 
