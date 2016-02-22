@@ -140,6 +140,8 @@
 
 				glitchPass = new THREE.GlitchPass();
 				glitchPass.renderToScreen = true;
+				glitchPass.intensity = 0;
+				setInterval(function(){ glitchPass.intensity += 10; console.log(glitchPass.intensity);}, 1000);
 				composer.addPass( glitchPass );
 				//
 

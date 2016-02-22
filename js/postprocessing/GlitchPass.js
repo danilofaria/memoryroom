@@ -33,6 +33,7 @@ THREE.GlitchPass = function ( dt_size ) {
 	this.scene.add( this.quad );
 	
 	this.goWild = false;
+	this.intensity = 0;
 	this.curF = 0;
 	this.generateTrigger();
 	
@@ -45,8 +46,9 @@ THREE.GlitchPass.prototype = {
 		this.uniforms[ "tDiffuse" ].value = readBuffer;
 		this.uniforms[ 'seed' ].value = Math.random();//default seeding
 		this.uniforms[ 'byp' ].value = 0;
-		
-		if ( this.curF % this.randX == 0 || this.goWild == true ) {
+
+		if ( //this.curF % this.randX == 0 || this.goWild == true || 
+			THREE.Math.randInt( 0, 10000 ) < this.intensity ) {
 
 			this.uniforms[ 'amount' ].value = Math.random() / 30;
 			this.uniforms[ 'angle' ].value = THREE.Math.randFloat( - Math.PI, Math.PI );
@@ -57,7 +59,9 @@ THREE.GlitchPass.prototype = {
 			this.curF = 0;
 			this.generateTrigger();
 
-		} else if ( this.curF % this.randX < this.randX / 5 ) {
+		} else if ( THREE.Math.randInt( 0, 10000 ) < this.intensity
+			//this.curF % this.randX < this.randX / 5 
+			) {
 
 			this.uniforms[ 'amount' ].value = Math.random() / 90;
 			this.uniforms[ 'angle' ].value = THREE.Math.randFloat( - Math.PI, Math.PI );
@@ -67,10 +71,10 @@ THREE.GlitchPass.prototype = {
 			this.uniforms[ 'seed_y' ].value = THREE.Math.randFloat( - 0.3, 0.3 );
 
 		} else if ( this.goWild == false ) {
-
 			this.uniforms[ 'byp' ].value = 1;
-
 		}
+			
+
 		this.curF ++;
 		
 		this.quad.material = this.material;
