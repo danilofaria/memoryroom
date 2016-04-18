@@ -107,24 +107,13 @@
 				var onError = function ( xhr ) {
 				};
 
-				// model
-
-				var loader = new THREE.OBJLoader( manager );
-				loader.load( 'obj/memoryroom.obj', function ( object ) {
-
-					object.traverse( function ( child ) {
-						if ( child instanceof THREE.Mesh ) {
-							child.material = new THREE.MeshNormalMaterial( );
-						}
-					} );
-
-					object.position.y = - 50;
-					object.scale.x = 40;
-					object.scale.y = 40;
-					object.scale.z = 40;
-					scene.add( object );
-
-				}, onProgress, onError );
+		        var material = new THREE.MeshBasicMaterial({
+		            map : THREE.ImageUtils.loadTexture('img/img1.png'), // CHANGE IMAGE NAME HERE
+		            color : 0xffffff
+		        });
+		        // plane
+		        var plane = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), material);
+		        scene.add(plane);
 
 				//
 
@@ -141,7 +130,7 @@
 				glitchPass = new THREE.GlitchPass();
 				glitchPass.renderToScreen = true;
 				glitchPass.intensity = 0;
-				setInterval(function(){ glitchPass.intensity += 10; console.log(glitchPass.intensity);}, 1000);
+				setInterval(function(){ glitchPass.intensity += 20; console.log(glitchPass.intensity);}, 1000);
 				composer.addPass( glitchPass );
 				//
 
